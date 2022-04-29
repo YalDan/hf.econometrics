@@ -24,17 +24,17 @@ s: the ticker symbol
 
 count: the count of the observation in the full dataset
 
-P_hat_tj: `P_hat_tj` calculated as in the original paper. Averaged subsampled observations over blocks.
+P_hat_tj: \code{P_hat_tj} calculated as in the original paper. Averaged subsampled observations over blocks.
 
-exp_P_hat_tj:  `e^(P_hat_tj)` to approximate the current price.
+exp_P_hat_tj:  \code{e^(P_hat_tj)} to approximate the current price.
 
-exp_P_hat_tj_minus1 Lagged value of `e^(P_hat_tj)`. This shows the price of the previous observation.
+exp_P_hat_tj_minus1 Lagged value of \code{e^(P_hat_tj)}. This shows the price of the previous observation.
 
 k: calculated as in the original paper. Indicates the degree of contamination with market microstructure noise in the data.
 
 M: calculated as in the original paper. The block size for subsampling.
 
-kM: `k*M`. Shows how many observations are in each block.
+kM: \code{k*M}. Shows how many observations are in each block.
 
 C: calculated as in the original paper.
 
