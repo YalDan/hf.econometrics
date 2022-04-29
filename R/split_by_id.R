@@ -23,23 +23,23 @@ split_by_id <- function(DATA,
   # by id
   if (!"h" %in% names(DATA)) DATA[, "h" := hour(t)] # if no h available
   if (!"q" %in% names(DATA)) DATA[, "q" := NA] # if no q reported
-  
+
   print(Sys.time());print("Splitting data")
   DT_split <- split(DATA[, .(date, "p" = mean(p), "q" = sum(q)), by = c("t", "s")], by = c("date", "s"))
-  
+
   # only keep time series that can be aggregated to at least x mins intervals
-  DT_split <- DT_split[which(lapply(DT_split,function(x) nrow(x) >= (full_day/max(delts))) == TRUE)] 
+  DT_split <- DT_split[which(lapply(DT_split,function(x) nrow(x) >= (full_day/max(delts))) == TRUE)]
   ##
 
   ##
   progress <- round(quantile(1:length(DT_split), probs = seq(0,1,0.05)))
   ##
-  
-  
+
+
   ## transform tick data files to regularly spaced return series w.r.t. number of observations##
-  
+
   print("Making returns")
-  
+
   DT_split <- lapply(1:length(DT_split), function(x) {
     if (x %in% progress) {print(Sys.time()); print(progress[which(progress == x)])}
     DT_tmp <- DT_split[[x]]
@@ -51,12 +51,11 @@ split_by_id <- function(DATA,
                                     ALIGN = ALIGN))
   })
   ##
-  
-  
+
   ## only keep non-empty list entries (yes, this discards all time series that are not "high frequency") ##
   # DT_split <- DT_split[which(lapply(DT_split,function(x) nrow(x) > full_day/15) == TRUE)]
   ##
-  
+
   print(Sys.time());print("Removing bounceback outliers")
 
   ## remove bouncebacks ##

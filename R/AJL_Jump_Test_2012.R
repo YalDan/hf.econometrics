@@ -5,9 +5,9 @@
 #' @import data.table
 #'
 #' @param DATA A data.table with structure as provided in the example.
-#' @param deltan The frequency of the data. Defaults to 1/365.25/86400 (i.e. 1 second).
+#' @param deltan The frequency of the data. Defaults to 1/365.25/86400 (i.e. 1 second in a 365.25 trading days interval).
 #' @param kn: The block size for preaveraging. Defaults to 100.
-#' @param T_large
+#' @param T_large: The length of T. Defaults to 1/365.25
 #' @param trunc_level
 #' @param variance_flag
 #' @param sign_level
@@ -24,7 +24,7 @@
 #' @return pvalue
 #' @return cv
 #' @return Jump_indicator
-#'
+
 #' @export
 AJL_JumpTest_2012 <- function(DATA, deltan = 1/365.25/86400, kn = 100, T_large = 1/365.25, trunc_level = 5, variance_flag = 1, sign_level = 0.05){
 
