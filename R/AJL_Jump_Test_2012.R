@@ -6,27 +6,27 @@
 #'
 #' @param DATA A data.table with structure as provided in the example.
 #' @param deltan The frequency of the data. Defaults to 1/365.25/86400 (i.e. 1 second in a 365.25 trading days interval).
-#' @param kn: The block size for preaveraging. Defaults to 100.
-#' @param T_large: The length of T. Defaults to 1/365.25
-#' @param trunc_level
-#' @param variance_flag
-#' @param sign_level
+#' @param kn The block size for preaveraging. Defaults to 100.
+#' @param T_large The length of T. Defaults to 1/365.25
+#' @param trunc_level: Value for the truncation levels for estimating asymptotic variances. Defaults to 5.
+#' @param variance_flag Should the variance be estimated? Defaults to TRUE.
+#' @param sign_level Significance level for the test statistic. Defaults to 0.05.
 #'
-#' @return DT_vvec:
-#' @return S_stdc:
-#' @return sigmabar
-#' @return un
-#' @return variancehat
-#' @return Mstargg
-#' @return Mstargh
-#' @return Mstarhh
-#' @return sign_level
-#' @return pvalue
-#' @return cv
-#' @return Jump_indicator
+#' @return DT_vvec: The V vectors from pre-averaging
+#' @return S_stdc: The standardized noise robust test statistic
+#' @return sigmabar: The average volatility
+#' @return un: The truncation level
+#' @return variancehat: The estimated variance
+#' @return Mstargg: The Mstar values as in the original paper
+#' @return Mstargh: The Mstar values as in the original paper
+#' @return Mstarhh: The Mstar values as in the original paper
+#' @return sign_level: The signficance level
+#' @return pvalue: The p-value
+#' @return cv: The critical value
+#' @return Jump_indicator: The jump indicator
 
 #' @export
-AJL_JumpTest_2012 <- function(DATA, deltan = 1/365.25/86400, kn = 100, T_large = 1/365.25, trunc_level = 5, variance_flag = 1, sign_level = 0.05){
+AJL_JumpTest_2012 <- function(DATA, deltan = 1/365.25/86400, kn = 100, T_large = 1/365.25, trunc_level = 5, variance_flag = TRUE, sign_level = 0.05){
 
   dz <- DATA[!is.na(log_ret), log_ret]
   # Set up constants
@@ -90,7 +90,7 @@ AJL_JumpTest_2012 <- function(DATA, deltan = 1/365.25/86400, kn = 100, T_large =
   DT_res <- data.table("date" = head(DATA[, date],1), "s" = head(DATA[, s],1), id, S,S_uncorrected)
 
   # Compute the standard error
-  if (variance_flag == 1) {
+  if (variance_flag) {
 
     # calibrate the average vol
     vvec_p2 = Vvec(ybarg,yhatg,2)

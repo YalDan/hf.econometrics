@@ -1,4 +1,4 @@
-#' Ait-Sahalia & Jacod Jump Test
+#' Ait-Sahalia & Jacod Jump Test (2012)
 #'
 #' Calculates the jump test statistic and test for finite activity as per Ait-Sahalia & Jacod (2012)
 #'
@@ -7,7 +7,7 @@
 #' @param DATA A data.table with structure as provided in the example.
 #'
 #' @return Returns the parameter grid and limits for the tests for jumps and for finite jump activity.
-#'
+
 #' @export
 AJ_JumpTest <- function(DATA, alpha = 0.1){
 

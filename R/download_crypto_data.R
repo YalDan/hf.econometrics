@@ -1,3 +1,11 @@
+#' Download crypto data
+#'
+#' Helper function to download data from the BRC
+#'
+#' @param LINK a link from the BRC.
+#' @param PATH the path where the data should be downloaded to.
+
+#' @export
 download_crypto_data <- function(LINK, PATH ="./data/raw/csv_dump/"){
   paste("Opening path", PATH)
   if (length(sort(list.files(path = PATH, pattern = "*.csv"))) == 0) {
