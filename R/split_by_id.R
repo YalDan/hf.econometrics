@@ -1,14 +1,13 @@
-## install and load packages ##
-libraries = c("data.table")
-lapply(libraries, function(x) if (!(x %in% installed.packages())) {install.packages(x)} )
-invisible(lapply(libraries, library, quietly = TRUE, character.only = TRUE))
-## ##
+#' Split by ID
+#'
+#' Helper function to split data by ID and make it regular for computing the test statistic.
+#'
+#' @import data.table
+#'
+#' @inheritParams make_regular_return_file
+#' @inheritParams remove_bounceback
 
-## settings ##
-Sys.setenv(LANG = "en") # set environment language to English
-Sys.setlocale("LC_TIME", "en_US.UTF-8") # set timestamp language to English
-## ##
-
+#' @export
 split_by_id <- function(DATA,
                         IMPUTATION = FALSE,
                         T_large = 1,
@@ -35,9 +34,7 @@ split_by_id <- function(DATA,
   progress <- round(quantile(1:length(DT_split), probs = seq(0,1,0.05)))
   ##
 
-
   ## transform tick data files to regularly spaced return series w.r.t. number of observations##
-
   print("Making returns")
 
   DT_split <- lapply(1:length(DT_split), function(x) {
@@ -52,13 +49,9 @@ split_by_id <- function(DATA,
   })
   ##
 
-  ## only keep non-empty list entries (yes, this discards all time series that are not "high frequency") ##
-  # DT_split <- DT_split[which(lapply(DT_split,function(x) nrow(x) > full_day/15) == TRUE)]
-  ##
-
   print(Sys.time());print("Removing bounceback outliers")
 
   ## remove bouncebacks ##
-  DT_split <- split(remove_bounceback(DT_split, IMPUTE = IMPUTATION), by = c("date", "s"))
+  DT_split <- split(remove_bounceback(DT_split, IMPUTATION = IMPUTATION), by = c("date", "s"))
   return(DT_split)
 }

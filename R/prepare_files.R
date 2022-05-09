@@ -4,16 +4,16 @@
 #'
 #' @import data.table
 #'
-#' @param DATA A data.table with structure as provided in the example.
+#' @param DATA The output from `LM_JumpTest_2012`.
 #' @param subs_date A vector with dates can be provided to subset from. Defaults to NA.
 #' @param sign_level The significance level for detecting jumps. Defaults to 0.01.
 #' @param split_waves Should the data be split into jump waves? Defaults to FALSE.
 #' @param wave_dist If `split_waves = TRUE`, where to set the splits? E.g. if no jump for longer than `wave_dist = 5`, the wave is over. This is adaptive w.r.t. to minutely / secondly frequency. Defaults to NA.
 #' @param wave_size Lower threshold of jumps needed to be in a wave for it to be considered? Defaults to 5, i.e. only waves with at least 5 jumps will be kept in the end. Set to 1 for all jumps to be included.
 #' @param bonferroni Should a Bonferroni correction be performed? Defaults to TRUE.
-#' @param DIFF_ID
-#' @param asymptotic_variation
-#' @param hourly
+#' @param DIFF_ID Should the data be evaluated by exchange and symbol or just by exchange? Defaults to FALSE, i.e. jumps are calculated per symbol.
+#' @param asymptotic_variation Should the asymptotic variation be used for calculating the test statistic? Defaults to FALSE, s.t. the empirical variation is used.
+#' @param hourly Is the test statistic calculated hourly? This can be useful for very high frequency data. Defaults to FALSE.
 
 #' @export
 preprocess_jump_data <- function(DATA,

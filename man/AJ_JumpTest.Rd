@@ -2,7 +2,7 @@
 % Please edit documentation in R/AJ_JumpTest_2012.R
 \name{AJ_JumpTest}
 \alias{AJ_JumpTest}
-\title{Ait-Sahalia & Jacod Jump Test}
+\title{Ait-Sahalia & Jacod Jump Test (2012)}
 \usage{
 AJ_JumpTest(DATA, alpha = 0.1)
 }

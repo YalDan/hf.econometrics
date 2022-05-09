@@ -1,6 +1,6 @@
 #' Ait-Sahalia, Jacod & Li Jump Test Functions
 #'
-#' Helpfer functions for computing the Ait-Sahalia, Jacod & Li (2012) test
+#' Helper functions for computing the Ait-Sahalia, Jacod & Li (2012) test
 #'
 #' @param mfun m(r) = E|N(0,1)|^r, see Jacod and Ait-Sahalia 2006 equation (10)
 #' @param Vvec The jth element, j=0,...,p/2, is V(Y,g,p-2j,j) = sum |Ybar|^(p-2j) Yhat^j

@@ -10,7 +10,7 @@ AJL_JumpTest_2012(
   kn = 100,
   T_large = 1/365.25,
   trunc_level = 5,
-  variance_flag = 1,
+  variance_flag = TRUE,
   sign_level = 0.05
 )
 }
@@ -19,36 +19,40 @@ AJL_JumpTest_2012(
 
 \item{deltan}{The frequency of the data. Defaults to 1/365.25/86400 (i.e. 1 second in a 365.25 trading days interval).}
 
-\item{sign_level}{}
+\item{kn}{The block size for preaveraging. Defaults to 100.}
 
-\item{kn:}{The block size for preaveraging. Defaults to 100.}
+\item{T_large}{The length of T. Defaults to 1/365.25}
 
-\item{T_large:}{The length of T. Defaults to 1/365.25}
+\item{variance_flag}{Should the variance be estimated? Defaults to TRUE.}
+
+\item{sign_level}{Significance level for the test statistic. Defaults to 0.05.}
+
+\item{trunc_level:}{Value for the truncation levels for estimating asymptotic variances. Defaults to 5.}
 }
 \value{
-DT_vvec:
+DT_vvec: The V vectors from pre-averaging
 
-S_stdc:
+S_stdc: The standardized noise robust test statistic
 
-sigmabar
+sigmabar: The average volatility
 
-un
+un: The truncation level
 
-variancehat
+variancehat: The estimated variance
 
-Mstargg
+Mstargg: The Mstar values as in the original paper
 
-Mstargh
+Mstargh: The Mstar values as in the original paper
 
-Mstarhh
+Mstarhh: The Mstar values as in the original paper
 
-sign_level
+sign_level: The signficance level
 
-pvalue
+pvalue: The p-value
 
-cv
+cv: The critical value
 
-Jump_indicator
+Jump_indicator: The jump indicator
 }
 \description{
 Calculates the jump test statistic as per Ait-Sahalia, Jacod & Li (2012)
