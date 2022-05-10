@@ -1,0 +1,81 @@
+---
+title: "High Frequency Econometrics Package in R"
+author: "Saef, Danial
+date: "9/05/2022"
+output:
+  github_document: 
+      number_sections: TRUE
+bibliography: hf.econometrics.bib
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_chunk$set(eval = FALSE)
+```
+
+This library serves as a companion to the publication "Understanding Jumps in High Frequency Digital Asset Markets". However it can also be used independently for clustering high dimensional datasets and fitting an implied stochastic volatility model.
+
+# Methodology
+This library contains implementations of a few recent publications in the field of High Frequency Econometrics:
+
+* Lee & Mykland Jump Test [@lee_jumps_2012]
+* Ait-Sahalia & Jacod Jump Test & Test for Jump Activity [@sahalia_analyzing_2012]
+* Ait-Sahalia, Jacod & Li Jump Test [@ait-sahalia_testing_2012]
+* Ait-Sahalia & Jacod variation estimation [@sahalia_analyzing_2012]
+* Jacod et al. Pre-averaging [@jacod_microstructure_2009, @jacod_limit_2010]
+
+The methods can be used in a stand-alone fashion or when obtained from the Blockchain Research Center with additional functionalities.
+
+```{r initialize, message = FALSE, warning = FALSE, results = "hide", echo = FALSE}
+#### install and load packages ####
+libraries = c("knitr","lubridate", "rms", "markdown","mime","rmarkdown","tinytex","data.table","lattice","latticeExtra","Hmisc","DT","scales","ggplot2")
+lapply(libraries, function(x) if (!(x %in% installed.packages())) {install.packages(x, dependencies = TRUE, repos = "http://cran.us.r-project.org")} )
+invisible(lapply(libraries, library, quietly = TRUE, character.only = TRUE))
+## ##
+
+#### settings ####
+Sys.setenv(LANG = "en") # set environment language to English
+Sys.setlocale("LC_TIME", "en_US.UTF-8") # set timestamp language to English
+Sys.setlocale("LC_TIME", "English") # set timestamp language to English
+## ##
+```
+# Usage
+
+## Installing
+The usage is pretty simple. First, install the package with `devtools`.
+
+```{r install package, message = FALSE, warning = FALSE, echo = TRUE}
+library(devtools)
+install_github("YalDan/hf.econometrics")
+library(hf.econometrics)
+``` 
+
+## Running the model
+Now we can just load a suitable dataset and run the test statistics we desire. A sample dataset is provided to illustrate the necessary file structure. 
+
+```{r load data, message = FALSE, warning = FALSE, echo = TRUE}
+# load the data 
+DT_list <- make_data("DT_sample.csv")
+DT_crypto_split_list <-  list("impute" = split_by_id(DT_list),
+                                "no_impute" =  split_by_id(DT_list))
+
+``` 
+
+Once the data is loaded we can calculate the jump test statistic:
+
+```{r jump tests, message = FALSE, warning = FALSE}
+## get LM result ##
+DT_LM_result_id <- jump_test(DT_split_noimpute, which_test = "LM_JumpTest")
+
+## get AJL result ##
+DT_AJL_result_id <- jump_test(DT_split_impute, which_test = "AJL_JumpTest")
+``` 
+
+Finally, some processing can be made to denoise the jump statistic.
+
+```{r preprocessing, message = FALSE, warning = FALSE}
+## Preprocess LM result ##
+DT_jumps_crypto <- preprocess_jump_data(DT_LM_result_crypto, sign.level = 0.001)
+``` 
+
+# References
