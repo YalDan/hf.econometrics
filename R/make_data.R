@@ -1,4 +1,4 @@
-#' Load and split
+#' Make data
 #'
 #' Helper function to download data from the BRC
 #'
