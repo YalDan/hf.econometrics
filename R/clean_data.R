@@ -33,8 +33,10 @@ clean_data <- function(DATA, id = NA){
 
   print(Sys.time())
   print(paste("adjust timestamp"))
-  DT_tmp[, "t" := lubridate::as_datetime(t/1e3,  tz = "UTC")]
 
+  if (!any(DT_tmp[,class(t)] %in% c("POSIXct","POSIXt"))){
+    DT_tmp[, "t" := lubridate::as_datetime(t/1e3,  tz = "UTC")]
+  }
   # DT_tmp #
   if (!is.na(id)) {
     if (id == "binance") {
