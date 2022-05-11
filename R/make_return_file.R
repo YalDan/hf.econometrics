@@ -43,14 +43,12 @@ make_return_file <- function(DATA, FREQ = 1, IMPUTATION = FALSE, CUTOFF = 10, AL
   DT_ts_p[, h := hour(index)]
   DT_ts_p[as.data.table(ts_p), "p" := i.ts_p.Close, on = "index"]
 
-  if (IMPUTE == TRUE) {
+  if (IMPUTATION) {
     DT_ts_p[, p := na.locf(p, na.rm = F)]
     DT_ts_p[, p := na.locf(p, na.rm = F, fromLast = T)]
     DT_ts_p[, log_ret := quantmod::Delt(p, type = "log")]
     DT_ts_p[1, log_ret := 0]
-  }
-
-  if (IMPUTE == FALSE) {
+  } else {
     DT_ts_p <- DT_ts_p[!is.na(p)]
     DT_ts_p[, log_ret := quantmod::Delt(p, type = "log")]
   }
