@@ -3,4 +3,4 @@
 .RData
 .Ruserdata
 DT_sample.csv
-./data/clean/
+/data/clean/
