@@ -44,8 +44,7 @@ make_return_file <- function(DATA, FREQ = 1, IMPUTATION = FALSE, CUTOFF = 10, AL
   DT_ts_p[as.data.table(ts_p), "p" := i.ts_p.Close, on = "index"]
 
   if (IMPUTATION) {
-    DT_ts_p[, p := imputeTS::na_locf(p, na.rm = F)]
-    DT_ts_p[, p := imputeTS::na_locf(p, na.rm = F, fromLast = T)]
+    DT_ts_p[, p := imputeTS::na_locf(p, na_remaining = "rev")]
     DT_ts_p[, log_ret := quantmod::Delt(p, type = "log")]
     DT_ts_p[1, log_ret := 0]
   } else {
@@ -56,8 +55,7 @@ make_return_file <- function(DATA, FREQ = 1, IMPUTATION = FALSE, CUTOFF = 10, AL
   if (!is.na(CUTOFF)) {
     if (is.numeric(CUTOFF)) {
       DT_ts_p[log_ret >= sd(log_ret, na.rm = TRUE)*CUTOFF, log_ret := NA]
-      DT_ts_p[, log_ret := imputeTS::na_locf(log_ret, na.rm = F)]
-      DT_ts_p[, log_ret := imputeTS::na_locf(log_ret, na.rm = F, fromLast = T)]
+      DT_ts_p[, log_ret := imputeTS::na_locf(log_ret, na_remaining = "rev")]
     } else {
       print("Warning: cutoff not numeric, no action taken")
     }
