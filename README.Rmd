@@ -56,7 +56,7 @@ Now we can just load a suitable dataset and run the test statistics we desire. A
 ```{r load data, message = FALSE, warning = FALSE, echo = TRUE}
 # load the data
 # currently, for this to work the data needs to be stored in "./data/raw/csv_dump/"
-DT_list <- make_data("DT_sample.csv")
+DT_list <- make_data("./data/raw/csv_dump/DT_sample.csv")
 DT_crypto_split_list <-  list("impute" = split_by_id(DT_list),
                                 "no_impute" =  split_by_id(DT_list))
 

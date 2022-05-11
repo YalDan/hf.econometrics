@@ -28,7 +28,7 @@ make_return_file <- function(DATA, FREQ = 1, IMPUTATION = FALSE, CUTOFF = 10, AL
 
   #
   ts_p <- xts(S$p, order.by = S$t, unique = FALSE)
-  if (align) {
+  if (ALIGN) {
     ts_p <- align.time(ts_p, n = FREQ)
   }
   ts_p <- to.period(ts_p, period = "seconds", k = FREQ)
