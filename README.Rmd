@@ -19,9 +19,8 @@ This library serves as a companion to the publication "Understanding Jumps in Hi
 This library contains implementations of a few recent publications in the field of High Frequency Econometrics:
 
 * Lee & Mykland Jump Test [@lee_jumps_2012]
-* Ait-Sahalia & Jacod Jump Test & Test for Jump Activity [@sahalia_analyzing_2012]
+* Ait-Sahalia & Jacod Jump Test & Test for Jump Activity + variation estimation [@ait-sahalia_analyzing_2012]
 * Ait-Sahalia, Jacod & Li Jump Test [@ait-sahalia_testing_2012]
-* Ait-Sahalia & Jacod variation estimation [@sahalia_analyzing_2012]
 * Jacod et al. Pre-averaging [@jacod_microstructure_2009, @jacod_limit_2010]
 
 The methods can be used in a stand-alone fashion or when obtained from the Blockchain Research Center with additional functionalities.
