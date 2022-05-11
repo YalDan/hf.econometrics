@@ -42,7 +42,7 @@ remove_bounceback <- function(DATA, BOUNCE_CUTOFF = 0.001, IMPUTATION = FALSE){
     bounce_ids <- as.vector(DT_tmp_bounce[abs(diff_obs) >= BOUNCE_CUTOFF*2 & (daily_id - lag_daily_id) == 1])
 
     # extract respective IDs
-    bounce_ids <- unlist(bounce_ids[, .(daily_id, lag_daily_id)])
+    bounce_ids <- unlist(bounce_ids[, list(daily_id, lag_daily_id)])
 
     # returns observations to be removed
     DT_tmp_bounce[daily_id %in% bounce_ids, unique_id]
