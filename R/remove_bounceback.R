@@ -13,11 +13,12 @@
 #' @export
 remove_bounceback <- function(DATA, BOUNCE_CUTOFF = 0.001, IMPUTATION = FALSE){
 
-  if(is.data.table(DATA))
-    {
+  if(is.data.table(DATA)) {
     DT_tmp <- copy(DATA)
   } else if(is.list(DATA)){
     DT_tmp <- rbindlist(DATA)
+  } else {
+    message(paste("Error: incorrect filetype:", class(DATA)))
   }
 
   if(! "id" %in% names(DT_tmp)) DT_tmp[, id := NA] # add unique ID if necessary
