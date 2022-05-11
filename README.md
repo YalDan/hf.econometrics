@@ -17,7 +17,8 @@ the field of High Frequency Econometrics:
 -   Ait-Sahalia & Jacod Jump Test & Test for Jump Activity + variation
     estimation (Aït-Sahalia and Jacod 2012)
 -   Ait-Sahalia, Jacod & Li Jump Test (Ait-Sahalia, Jacod, and Li 2012)
--   Jacod et al. Pre-averaging Jacod, Podolskij, and Vetter (2010)
+-   Pre-averaging approach ( Jacod et al. (2009), Jacod, Podolskij, and
+    Vetter (2010) )
 
 The methods can be used in a stand-alone fashion or when obtained from
 the Blockchain Research Center with additional functionalities.
