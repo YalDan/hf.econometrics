@@ -40,10 +40,10 @@ remove_bounceback <- function(DATA, BOUNCE_CUTOFF = 0.001, IMPUTATION = FALSE){
     DT_tmp_bounce[, lag_daily_id := shift(daily_id, 1)]
 
     # difference between returns larger than cutoff*2 and consecutive observations?
-    bounce_ids <- as.vector(DT_tmp_bounce[abs(diff_obs) >= BOUNCE_CUTOFF*2 & (daily_id - lag_daily_id) == 1])
+    bounce_ids <- DT_tmp_bounce[abs(diff_obs) >= BOUNCE_CUTOFF*2 & (daily_id - lag_daily_id) == 1]
 
     # extract respective IDs
-    bounce_ids <- unlist(bounce_ids[, list(daily_id, lag_daily_id)])
+    bounce_ids <- unlist(bounce_ids[, .(daily_id, lag_daily_id)])
 
     # returns observations to be removed
     DT_tmp_bounce[daily_id %in% bounce_ids, unique_id]
@@ -53,7 +53,7 @@ remove_bounceback <- function(DATA, BOUNCE_CUTOFF = 0.001, IMPUTATION = FALSE){
 
   DT_tmp[unique_id %in% bounce_ids, log_ret := NA]
 
-  if (IMPUTE == TRUE){
+  if (IMPUTATION == TRUE){
     DT_tmp[1, log_ret := 0]
     DT_tmp[, log_ret := na.locf(log_ret, na.rm = F)]
     DT_tmp[, log_ret := na.locf(log_ret, na.rm = F, fromLast = T)]
