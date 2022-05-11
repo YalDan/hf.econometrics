@@ -12,7 +12,7 @@ load_csv_dump <- function(PATH = "./data/raw/csv_dump/"){
   files <- sort(list.files(path = PATH, pattern = "*.csv"))
 
   ## rename files ##
-  file_names_new <- rename_files(files, PATH)
+  file_names_new <- rename_raw_files(files, PATH)
 
   ## read files into list ##
   DT_collection <- lapply(seq_along(files), function(x) {

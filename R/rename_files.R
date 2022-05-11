@@ -5,7 +5,7 @@
 #' @import data.table
 
 #' @export
-rename_files <- function(files, PATH){
+rename_raw_files <- function(files, PATH){
 
   ## categorize files ##
   DT_colnames <- lapply(files, function(x) {
