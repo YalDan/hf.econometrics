@@ -9,7 +9,7 @@
 #'
 #' @param DATA A data.table with structure as provided in the example.
 #' @param FREQ The highest possible frequency. Defaults to 1 for a frequency of 1 second.
-#' @param IMPUTATION Should missing values be imputed? If TRUE, then `na.locf` will be used. Defaults to FALSE.
+#' @param IMPUTATION Should missing values be imputed? If TRUE, then `na_locf` will be used. Defaults to FALSE.
 #' @param CUTOFF The number of standard deviations of log returns around which data should be kept. Defaults to 10, s.t. observations outside +-10 SD will be omitted.
 #' @param ALIGN Should the data be aligned to round timestamps? Defaults to TRUE.
 #'
@@ -44,8 +44,8 @@ make_return_file <- function(DATA, FREQ = 1, IMPUTATION = FALSE, CUTOFF = 10, AL
   DT_ts_p[as.data.table(ts_p), "p" := i.ts_p.Close, on = "index"]
 
   if (IMPUTATION) {
-    DT_ts_p[, p := na.locf(p, na.rm = F)]
-    DT_ts_p[, p := na.locf(p, na.rm = F, fromLast = T)]
+    DT_ts_p[, p := imputeTS::na_locf(p, na.rm = F)]
+    DT_ts_p[, p := imputeTS::na_locf(p, na.rm = F, fromLast = T)]
     DT_ts_p[, log_ret := quantmod::Delt(p, type = "log")]
     DT_ts_p[1, log_ret := 0]
   } else {
@@ -56,8 +56,8 @@ make_return_file <- function(DATA, FREQ = 1, IMPUTATION = FALSE, CUTOFF = 10, AL
   if (!is.na(CUTOFF)) {
     if (is.numeric(CUTOFF)) {
       DT_ts_p[log_ret >= sd(log_ret, na.rm = TRUE)*CUTOFF, log_ret := NA]
-      DT_ts_p[, log_ret := na.locf(log_ret, na.rm = F)]
-      DT_ts_p[, log_ret := na.locf(log_ret, na.rm = F, fromLast = T)]
+      DT_ts_p[, log_ret := imputeTS::na_locf(log_ret, na.rm = F)]
+      DT_ts_p[, log_ret := imputeTS::na_locf(log_ret, na.rm = F, fromLast = T)]
     } else {
       print("Warning: cutoff not numeric, no action taken")
     }

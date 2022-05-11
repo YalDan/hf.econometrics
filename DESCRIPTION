@@ -12,6 +12,7 @@ RoxygenNote: 7.1.2
 Roxygen: list(markdown = TRUE)
 Imports:
     xts,
+    imputeTS,
     data.table,
     lubridate,
     quantmod,
