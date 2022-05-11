@@ -1,7 +1,7 @@
 ---
 title: "High Frequency Econometrics Package in R"
-author: "Saef, Danial
-date: "9/05/2022"
+author: "Saef, Danial"
+date: "09/05/2022"
 output:
   github_document: 
       number_sections: TRUE
@@ -42,7 +42,7 @@ Sys.setlocale("LC_TIME", "English") # set timestamp language to English
 # Usage
 
 ## Installing
-The usage is pretty simple. First, install the package with `devtools`.
+The usage is pretty simple. First, install the package with `devtools`. Note that this library is still experimental, s.t. no proper unit testing or object classes have been implemented yet. In case of bugs please report them and I will work on fixing them.
 
 ```{r install package, message = FALSE, warning = FALSE, echo = FALSE}
 library(devtools)
@@ -57,7 +57,7 @@ Now we can just load a suitable dataset and run the test statistics we desire. A
 # load the data
 # currently, for this to work the data needs to be stored in "./data/raw/csv_dump/"
 DT_list <- make_data("./data/raw/csv_dump/DT_sample.csv")
-DT_crypto_split_list <-  list("impute" = split_by_id(DT_list),
+DT_split_list <-  list("impute" = split_by_id(DT_list),
                                 "no_impute" =  split_by_id(DT_list))
 
 ``` 
@@ -66,17 +66,17 @@ Once the data is loaded we can calculate the jump test statistic:
 
 ```{r jump tests, message = FALSE, warning = FALSE}
 ## get LM result ##
-DT_LM_result_id <- jump_test(DT_split_noimpute, which_test = "LM_JumpTest")
+DT_LM_result_id <- jump_test(DT_split_list$no_impute, which_test = "LM_JumpTest")
 
 ## get AJL result ##
-DT_AJL_result_id <- jump_test(DT_split_impute, which_test = "AJL_JumpTest")
+DT_AJL_result_id <- jump_test(DT_split_list$impute, which_test = "AJL_JumpTest")
 ``` 
 
 Finally, some processing can be made to denoise the jump statistic.
 
 ```{r preprocessing, message = FALSE, warning = FALSE}
 ## Preprocess LM result ##
-DT_jumps_crypto <- preprocess_jump_data(DT_LM_result_crypto, sign.level = 0.001)
+DT_jumps_crypto <- preprocess_jump_data(DT_LM_result_id, sign_level = 0.01)
 ``` 
 
 # References
