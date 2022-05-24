@@ -43,7 +43,7 @@ Sys.setlocale("LC_TIME", "English") # set timestamp language to English
 ## Installing
 The usage is pretty simple. First, install the package with `devtools`. Note that this library is still experimental, s.t. no proper unit testing or object classes have been implemented yet. In case of bugs please report them and I will work on fixing them.
 
-```{r install package, message = FALSE, warning = FALSE, echo = FALSE}
+```{r install package, message = FALSE, warning = FALSE, echo = TRUE}
 library(devtools)
 install_github("YalDan/hf.econometrics")
 library(hf.econometrics)

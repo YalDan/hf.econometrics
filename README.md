@@ -32,6 +32,12 @@ Note that this library is still experimental, s.t. no proper unit
 testing or object classes have been implemented yet. In case of bugs
 please report them and I will work on fixing them.
 
+``` r
+library(devtools)
+install_github("YalDan/hf.econometrics")
+library(hf.econometrics)
+```
+
 ## 2.2 Running the model
 
 Now we can just load a suitable dataset and run the test statistics we
