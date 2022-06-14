@@ -8,7 +8,7 @@
 #' @param DATA A data.table with structure as provided in the example.
 #' @param variation_estimate How should sigma_hat be estimated? Options are "HP_13" for Hautsch & Podolskij (2013) "Modulated realized covariance"; "Jacod_10" for Jacod et al. (2010) "Pre-averaging"; "AJ_09" for Ait-Sahalia & Jacod (2009) "Jump Activity". Defaults to "Jacod_10".
 #'
-#' @return Returns a list with both the ICC and the ISVM result.
+#' @return Returns a data.table with the jump test result.
 #' @return t: The timestamps on `G_n_kM``
 #' @return date: The corresponding date
 #' @return id: in case the info is available, on which exchange was the data point observed?

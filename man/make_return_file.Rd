@@ -11,7 +11,7 @@ make_return_file(DATA, FREQ = 1, IMPUTATION = FALSE, CUTOFF = 10, ALIGN = TRUE)
 
 \item{FREQ}{The highest possible frequency. Defaults to 1 for a frequency of 1 second.}
 
-\item{IMPUTATION}{Should missing values be imputed? If TRUE, then \code{na.locf} will be used. Defaults to FALSE.}
+\item{IMPUTATION}{Should missing values be imputed? If TRUE, then \code{na_locf} will be used. Defaults to FALSE.}
 
 \item{CUTOFF}{The number of standard deviations of log returns around which data should be kept. Defaults to 10, s.t. observations outside +-10 SD will be omitted.}
 
