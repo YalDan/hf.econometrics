@@ -13,6 +13,7 @@
 jacod_preaveraging <- function(DATA,kn = 100){
 
   dz <- DATA[!is.na(log_ret), log_ret]
+
   # Set up constants
   gbar2 = 1/12
   phibar2 = 1/12

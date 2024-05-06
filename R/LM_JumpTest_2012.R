@@ -54,10 +54,10 @@ LM_JumpTest <- function(DATA, variation_estimate = "Jacod_10"){
 
   # Get n
   n <- length(P_tilde)
-  T_large <- length(unique(DT_ts_p$date))
+  T_large <- DT_ts_p[,length(unique(d))]
 
   # acf #
-  bacf <- acf(DT_ts_p[!is.na(log_ret)]$log_ret, plot = FALSE)
+  bacf <- acf(DT_ts_p[!is.na(log_ret),log_ret], plot = FALSE)
   bacfdf <- with(bacf, data.frame(lag, acf))
 
   # CI # https://stackoverflow.com/questions/42753017/adding-confidence-intervals-to-plotted-acf-in-ggplot2
@@ -85,7 +85,7 @@ LM_JumpTest <- function(DATA, variation_estimate = "Jacod_10"){
   # block size #
   C <- NaN
   if (q_hat * 100 < 0.01) {C <- 1/19;
-  print(paste(id_dummy,DT_ts_p[, "s"][1],DT_ts_p[, "date"][1],
+  print(paste(id_dummy,DT_ts_p[, "s"][1],DT_ts_p[, "d"][1],
               "Q_Hat is smaller than 0.01. C defaulted to 1/19. Choose better value.",
               sep = " - "))
   } else if (q_hat * 100 <= (0.05 + 0.07)/2) {C <- 1/19
@@ -93,7 +93,7 @@ LM_JumpTest <- function(DATA, variation_estimate = "Jacod_10"){
   } else if (q_hat * 100 <= (0.3 + 0.4)/2) {C <- 1/16
   } else if (q_hat * 100 <= (0.9 + 0.8)/2) {C <- 1/9
   } else if (q_hat * 100 <= 1) {C <- 1/8
-  } else if (q_hat * 100 > 1) {C <- 1/8; print(paste(id_dummy,DT_ts_p[, "s"][1],DT_ts_p[, "date"][1],
+  } else if (q_hat * 100 > 1) {C <- 1/8; print(paste(id_dummy,DT_ts_p[, "s"][1],DT_ts_p[, "d"][1],
                                                      "Q_Hat is larger than 1. C defaulted to 1/8. Choose better value.",
                                                      sep = " - "))
   }
@@ -164,7 +164,7 @@ LM_JumpTest <- function(DATA, variation_estimate = "Jacod_10"){
 
   # aggregate results in data.table
   res <- data.table("t" = DT_ts_p[,t][G_n_kM],
-                    "date" =  DT_ts_p[,date][1],
+                    "date" =  DT_ts_p[,d][1],
                     "id" =  id_dummy,
                     "s" =  DT_ts_p[,s][1],
                     "count" = DT_ts_p[,count][G_n_kM],

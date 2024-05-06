@@ -12,60 +12,53 @@
 
 #' @export
 clean_data <- function(DATA, id = NA){
-  DT_tmp <- DATA
+  DT_tmp <- copy(DATA) # Ensure to work on a copy of the data
 
   id <- DT_tmp[1,id]
 
-  print(Sys.time())
-  print(paste("processing", id))
+  print(paste(Sys.time(), "- Starting data cleaning for ID:", id))
 
-  if ("q" %in% names(DT_tmp)) {
-    DT_tmp <- DT_tmp[, c("t", "s", "p", "q", "id")]
-  } else {
-    DT_tmp <- DT_tmp[, c("t", "s", "p", "id")]
-  }
+  # Preprocessing steps
+  print(paste(Sys.time(), "- Preprocessing data..."))
 
-  print(Sys.time())
-  print(paste("get symbol to lowercase and remove redundant content"))
-  DT_tmp[, "s" := tolower(s)]
-  DT_tmp[, "s" := gsub("-", "", s)]
-  DT_tmp[, "s" := gsub("usdt", "usd", s)]
+  # Convert 't' from various formats to POSIXct
+  print(paste(Sys.time(), "- Converting timestamps to POSIXct."))
+  DT_tmp[, t := tryCatch({
+    as.POSIXct(as.numeric(t) / 1e3, origin = "1970-01-01", tz = "UTC")
+  }, warning = function(w) {
+    print(paste("Warning in timestamp conversion:", w))
+    NA
+  }, error = function(e) {
+    print(paste("Error in timestamp conversion:", e))
+    NA
+  }, finally = {
+    print(paste(Sys.time(), "- Timestamp conversion completed."))
+  })]
 
-  print(Sys.time())
-  print(paste("adjust timestamp"))
+  # Handle symbol adjustments
+  print(paste(Sys.time(), " - Adjusting symbol names to lowercase and removing redundant content."))
+  DT_tmp[, s := tolower(s)]
+  DT_tmp[, s := gsub("-", "", s)]
+  DT_tmp[, s := gsub("usdt", "usd", s)]
 
-  if (!any(DT_tmp[,class(t)] %in% c("POSIXct","POSIXt"))){
-    DT_tmp[, "t" := lubridate::as_datetime(t/1e3,  tz = "UTC")]
-  }
-  # DT_tmp #
-  if (!is.na(id)) {
-    if (id == "binance") {
+  # Example of a scalable approach for symbol renaming
+  symbol_replacements <- list(
+    binance = c(iotausd = "iotusd"),
+    hitbtc = c(iotausd = "iotusd", dashusd = "dshusd"),
+    poloniex = c(dashusd = "dshusd")
+  )
 
-      print(Sys.time())
-      print(paste("rename symbols"))
-
-      DT_tmp[s %in% "iotausd", s := gsub("iotausd", "iotusd", s)]
-
-    } else if (id == "hitbtc") {
-
-      print(Sys.time())
-      print(paste("rename symbols"))
-
-      DT_tmp[s %in% "iotausd", s := gsub("iotausd", "iotusd", s)]
-      DT_tmp[s %in% "dashusd", s := gsub("dashusd", "dshusd", s)]
-
-    } else if (id == "poloniex") {
-
-      print(Sys.time())
-      print(paste("rename symbols"))
-
-      DT_tmp[s %in% "dashusd", s := gsub("dashusd", "dshusd", s)]
-
-    } else {
-      print(paste("ID",id,"not found, no extra steps taken."))
+  if (!is.na(id) && id %in% names(symbol_replacements)) {
+    replacements <- symbol_replacements[[id]]
+    print(paste(Sys.time(), " - Renaming symbols based on exchange ID:", id))
+    for (old in names(replacements)) {
+      DT_tmp[s == old, s := replacements[[old]]]
     }
+  } else if (!is.na(id)) {
+    print(paste(Sys.time(), " - ID provided but no specific renaming rules found for:", id))
   }
 
+  print(paste(Sys.time(), " - Data cleaning completed for ID:", id))
   return(DT_tmp)
 }
 

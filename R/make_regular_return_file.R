@@ -10,34 +10,35 @@
 #' @param IMPUTATION Should missing values be imputed? If TRUE, then `na.locf` will be used. Defaults to FALSE.
 #' @param T_large The number of trading days. Defaults to 1 for one observed day.
 #' @param ALIGN Should the data be aligned to round timestamps? Defaults to TRUE.
+#' @param FREQ The highest possible frequency. Defaults to 1 for a frequency of 1 second.
 #'
 #' @return Outputs a regularized return file with appropriate frequency.
 
 #' @export
-make_regular_return_file <- function(DATA, delts = c(5, 10, 15), full_day = 0.95*86400, IMPUTATION = FALSE, T_large = 1, ALIGN = TRUE, FREQ = 1){
+make_regular_return_file <- function(DATA, delts = c(1, 5, 10, 15), full_day = 0.95*86400, IMPUTATION = FALSE, T_large = 1, ALIGN = TRUE, FREQ = 1){
   DT_tmp <- DATA
-  if (!"h" %in% names(DT_tmp)) DT_tmp[, "h" := hour(t)] # if no h available
+
+  # Ensure DT_tmp is a data.table
+  if (!"h" %in% names(DT_tmp)) {
+    DT_tmp[, "h" := hour(t)]
+  } # if no 'h' column available
 
   N <- nrow(DT_tmp)
   DT_ret <- data.table()
 
-  if (N >= full_day) {
-    DT_ret <- make_return_file(DT_tmp, FREQ = FREQ, IMPUTATION = IMPUTATION, ALIGN = ALIGN)
-    DT_ret[, freq := FREQ]
-    DT_ret[, T_large := T_large]
-    return(DT_ret)
-
-    # if N is greater or equal to 75% of a c(5, 10, 15) interval convert the file to that frequency
-  } else {
-    for (i in 1:length(delts)) {
-      d <- delts[i]
-      if (N >= full_day*1/d) {
-        DT_ret <-	make_return_file(DT_tmp, FREQ = d, IMPUTATION = IMPUTATION, ALIGN = ALIGN)
-        DT_ret[, freq := d]
-        DT_ret[, T_large := T_large]
-        d <- delts[1]
-        return(DT_ret)
-      }
+  # Check if the number of observations meets or exceeds what is considered a full day
+  for (i in 1:length(delts)) {
+    delta <- delts[i]
+    # Check if the number of observations is enough for the current frequency 'd'
+    if (N >= full_day * (1/delta)) {
+      DT_ret <- make_return_file(DT_tmp, FREQ = delta, IMPUTATION = IMPUTATION, ALIGN = ALIGN)
+      DT_ret[, freq := delta]
+      DT_ret[, T_large := T_large]
+      return(DT_ret)
     }
   }
+  # If no frequency condition is met, possibly return an empty data.table or a message
+  warning("No suitable frequency found. Returning empty data.table.")
+  return(DT_ret)
 }
+

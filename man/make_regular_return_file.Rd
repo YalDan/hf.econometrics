@@ -6,7 +6,7 @@
 \usage{
 make_regular_return_file(
   DATA,
-  delts = c(5, 10, 15),
+  delts = c(1, 5, 10, 15),
   full_day = 0.95 * 86400,
   IMPUTATION = FALSE,
   T_large = 1,
@@ -26,6 +26,8 @@ make_regular_return_file(
 \item{T_large}{The number of trading days. Defaults to 1 for one observed day.}
 
 \item{ALIGN}{Should the data be aligned to round timestamps? Defaults to TRUE.}
+
+\item{FREQ}{The highest possible frequency. Defaults to 1 for a frequency of 1 second.}
 }
 \value{
 Outputs a regularized return file with appropriate frequency.

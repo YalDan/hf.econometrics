@@ -87,7 +87,7 @@ AJL_JumpTest_2012 <- function(DATA, deltan = 1/365.25/86400, kn = 100, T_large =
   } else {
     id <- NA
   }
-  DT_res <- data.table("date" = head(DATA[, date],1), "s" = head(DATA[, s],1), id, S,S_uncorrected)
+  DT_res <- data.table("date" = head(DATA[, d],1), "s" = head(DATA[, s],1), id, S,S_uncorrected)
 
   # Compute the standard error
   if (variance_flag) {

@@ -9,7 +9,7 @@ split_by_id(
   IMPUTATION = FALSE,
   T_large = 1,
   full_day = 0.95 * 86400,
-  delts = c(5, 10, 15),
+  delts = c(1, 5, 10, 15),
   FREQ = 1,
   ALIGN = TRUE
 )
@@ -24,6 +24,8 @@ split_by_id(
 \item{full_day}{How many observations in seconds does a full day have? Defaults to \code{0.95*86400}.}
 
 \item{delts}{Frequencies that should be tested for subsampling the regularized data, where e.g. a value of 5 means that the data is subsampled every 5 seconds. Defaults to \code{c(5, 10, 15)}.}
+
+\item{FREQ}{The highest possible frequency. Defaults to 1 for a frequency of 1 second.}
 
 \item{ALIGN}{Should the data be aligned to round timestamps? Defaults to TRUE.}
 }

@@ -18,6 +18,13 @@
 #' @export
 make_return_file <- function(DATA, FREQ = 1, IMPUTATION = FALSE, CUTOFF = 10, ALIGN = TRUE){
   S <- DATA
+  setkey(S,t)
+
+  # Check if the first timestamp equals the minimum timestamp
+  if(first(S$t) != min(S$t)) {
+    stop("The first timestamp in the data does not match the minimum timestamp.")
+  }
+
 
   #
   start <- paste(as.Date(first(S[, t])),  " ", first(S[, h]), ":00:00", sep = "")
@@ -35,9 +42,9 @@ make_return_file <- function(DATA, FREQ = 1, IMPUTATION = FALSE, CUTOFF = 10, AL
 
   #
   DT_ts_p <- data.table("index" = seq(from = start, to = end, by = paste(FREQ, " sec", sep = "")),
-                        "date" = unique(S$date),
+                        "d" = unique(S[,d]),
                         "id" = unique(S$id),
-                        "s" = unique(S$s)
+                        "s" = unique(S[,s])
   )
   DT_ts_p[, index := as.POSIXct(index, format = "%Y-%m-%dT%H:%M:%OSZ", tz = "UTC")]
   DT_ts_p[, h := hour(index)]

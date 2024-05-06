@@ -133,23 +133,28 @@ YbarYhat <- function(dY,kn,k){
   # kn: the window
   # k:  the scale parameter
 
-  n = length(dY)
-  m = n - kn + 1
-  Ybar = c()
-  Yhat = c()
+  n <- length(dY)
+  m <- n - kn + 1
+  Ybar <- c()
+  Yhat <- c()
+
+  # Ensure m is positive for proper vector initialization
+  if (m <= 0) {
+    stop("Error: The calculation of 'm' results in a non-positive value, indicating an issue with 'kn' relative to the length of 'dY'.")
+  }
 
   # The weighting vector
-  g = gfun(k*(0:kn)/kn)
-  gprime2 = (g[2:length(g)] - g[1:(length(g)-1)]) ^ 2
+  g <- gfun(k*(0:kn)/kn)
+  gprime2 <- (g[2:length(g)] - g[1:(length(g)-1)]) ^ 2
   g <- g[-1]
 
   # Compute Ybar, Yhat
   for (i in 1:m){
-    tmpbar = 0
-    tmphat = 0
+    tmpbar <- 0
+    tmphat <- 0
     for (j in 1:kn){
-      tmpbar = tmpbar + g[(j)] * dY[(i+j-1)];
-      tmphat = tmphat + gprime2[(j)] * dY[(i+j-1)] ^ 2
+      tmpbar <- tmpbar + g[(j)] * dY[(i+j-1)];
+      tmphat <- tmphat + gprime2[(j)] * dY[(i+j-1)] ^ 2
     }
 
     Ybar[i] = tmpbar

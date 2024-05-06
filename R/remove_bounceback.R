@@ -24,9 +24,9 @@ remove_bounceback <- function(DATA, BOUNCE_CUTOFF = 0.001, IMPUTATION = FALSE){
   if(! "id" %in% names(DT_tmp)) DT_tmp[, id := NA] # add unique ID if necessary
 
   DT_tmp[, unique_id := 1:.N]
-  DT_tmp[, daily_id := 1:.N, by = c("s", "id", "date")]
+  DT_tmp[, daily_id := 1:.N, by = c("s", "id", "d")]
 
-  DT_bounce <- split(DT_tmp[!log_ret %between% c(BOUNCE_CUTOFF*-1, BOUNCE_CUTOFF)], by = c("s", "id", "date"))
+  DT_bounce <- split(DT_tmp[!log_ret %between% c(BOUNCE_CUTOFF*-1, BOUNCE_CUTOFF)], by = c("s", "id", "d"))
 
   bounce_ids <- lapply(seq_along(DT_bounce), function(x){
 
