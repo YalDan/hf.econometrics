@@ -2,5 +2,18 @@
 .Rhistory
 .RData
 .Ruserdata
-/data/clean/
-*.DS_store
+.DS_Store
+*.DS_Store
+*.tar.gz
+hf.econometrics.Rcheck/
+# pipeline artefacts
+/pipeline/_targets/
+/pipeline/output/
+# renv (the lockfile and activate script are tracked)
+renv/library/
+renv/local/
+renv/cellar/
+renv/lock/
+renv/python/
+renv/sandbox/
+renv/staging/
