@@ -36,6 +36,8 @@ Collate:
     'class-result.R'
     'class-series.R'
     'hf.econometrics-package.R'
+    'lm2012-utils.R'
+    'lm2012.R'
     'weights.R'
     'preaveraging.R'
     'utils-checks.R'
