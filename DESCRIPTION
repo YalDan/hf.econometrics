@@ -33,7 +33,12 @@ Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.3.1
 Collate: 
+    'aj-power-variation.R'
     'class-result.R'
+    'aj2009a-jump-test.R'
+    'aj2009b-activity-index.R'
+    'aj2011-finite-activity.R'
+    'aj2012-spectrum.R'
     'class-series.R'
     'hf.econometrics-package.R'
     'iv-estimators.R'
