@@ -15,9 +15,14 @@
 #
 # `profile` selects a preset. "companion" reproduces the companion paper;
 # "lm2012" applies the data handling and inference of Lee and Mykland (2012,
-# Section 6) to the same exports.
+# Section 6) to the same exports. HF_PIPELINE_PROFILE overrides the value
+# without editing this file. Each profile writes to output/<profile>/.
 
-profile <- "companion"
+profile <- Sys.getenv("HF_PIPELINE_PROFILE", unset = "companion")
+if (!(profile %in% c("companion", "lm2012"))) {
+  stop(sprintf("profile must be \"companion\" or \"lm2012\", not \"%s\".", profile),
+       call. = FALSE)
+}
 
 config <- list(
   input = list(
@@ -101,6 +106,9 @@ config <- list(
     # Test window: "1 day" [SNSH 2021 §3.1/§3.4] or "1 hour" [LM 2012 §6.1].
     window = "1 day",
     # Arguments for hf.econometrics::lm_options(); empty = the paper's defaults.
+    # Its `alpha` sets only the package's own unadjusted columns (`reject`,
+    # `threshold`, `n_flagged`, block `jump`); the pipeline's decisions use
+    # `testing` below.
     options = list()
   ),
 
@@ -110,7 +118,12 @@ config <- list(
     # the first price [0.1.0] so that the grid spans the whole day; "drop"
     # starts the grid at the first trade.
     leading = "first",
-    options = list()                 # for hf.econometrics::ajl_options()
+    # Arguments for hf.econometrics::ajl_options(); otherwise the defaults of
+    # AJL 2012 §4. Both nulls are tested: jump days (`testing` below) are
+    # decided on the no-jump null (eq. 3.26); the jump null (eq. 3.27) is
+    # only reported. As for LM, `alpha` sets only the package's `reject` and
+    # `critical_value`.
+    options = list(null = "both")
   ),
 
   # Ait-Sahalia and Jacod jump test on the same grid; not part of the
@@ -157,7 +170,7 @@ config <- list(
   ),
 
   output = list(
-    dir = "output",
+    dir = file.path("output", profile),
     all_blocks = FALSE               # also write every LM block (large)
   ),
 

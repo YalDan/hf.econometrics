@@ -69,8 +69,11 @@ flag_lm_blocks <- function(blocks, windows, cfg_test) {
   b
 }
 
-# AJL day decisions on the no-jump null: Bonferroni across the days of a
-# family, or none. `jump_day` = the no-jump null is rejected.
+# AJL day decisions on the no-jump null (eq. 3.26, lower tail): Bonferroni
+# across the days of a family, or none. `jump_day` = the no-jump null is
+# rejected; it is NA on the rows of the jump null and where the test is not
+# available (error, or p_value NA because the variance estimate is not
+# positive). Such days are not counted in the family.
 adjust_ajl_tests <- function(tests, cfg_test) {
   a <- data.table::as.data.table(tests)
   if (!nrow(a)) return(a)
@@ -84,8 +87,9 @@ adjust_ajl_tests <- function(tests, cfg_test) {
     size[i] <- length(i)
     p_adj[i] <- if (cfg_test$ajl_adjust == "bonferroni") pmin(1, length(i) * p_all[i]) else p_all[i]
   }
+  jump_day <- ifelse(ok, p_adj <= alpha, NA)
   data.table::set(a, j = c("adjustment", "family_size", "p_adjusted", "jump_day"),
-                  value = list(cfg_test$ajl_adjust, size, p_adj, ok & p_adj <= alpha))
+                  value = list(cfg_test$ajl_adjust, size, p_adj, jump_day))
   a
 }
 
@@ -93,11 +97,14 @@ adjust_ajl_tests <- function(tests, cfg_test) {
 combine_detections <- function(blocks, ajl, cfg_test, cfg_cons) {
   b <- data.table::as.data.table(blocks)
   if (!("detected" %in% names(b))) {
+    # No block at all (no unit tested): the columns of lm_block_table().
+    no_time <- .POSIXct(numeric(), tz = "UTC")
     b <- data.table::data.table(unit_id = character(), date = data.table::as.IDate(character()),
                                 symbol = character(), venue = character(), window = integer(),
-                                window_start = .POSIXct(numeric(), tz = "UTC"),
-                                block = integer(), p_block = numeric(), multiplier = numeric(),
-                                detected = logical())
+                                window_start = no_time, index = integer(), time = no_time,
+                                time_end = no_time, P_hat = numeric(), L = numeric(),
+                                chi = numeric(), jump = integer(), p_block = numeric(),
+                                block = integer(), multiplier = numeric(), detected = logical())
   }
   # Locals used inside `[` start with "." so that no method column masks them.
   .sel <- which(b$detected %in% TRUE)
