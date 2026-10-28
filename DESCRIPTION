@@ -35,6 +35,11 @@ RoxygenNote: 7.3.1
 Collate: 
     'class-result.R'
     'class-series.R'
+    'data-filters.R'
+    'data-flags.R'
+    'data-grid.R'
+    'data-time.R'
+    'data-windows.R'
     'hf.econometrics-package.R'
     'weights.R'
     'preaveraging.R'
