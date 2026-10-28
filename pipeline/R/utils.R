@@ -58,6 +58,30 @@ check_config <- function(config) {
   choice(config$consecutive$anchor, c("first", "previous"), "consecutive$anchor")
   number(config$workers, "workers", 0, Inf)
   choice(config$on_error, c("record", "stop"), "on_error")
+
+  # Method options: built once here with the package's own constructors, so
+  # that invalid options stop tar_make() before any data is read.
+  if (utils::packageVersion("hf.econometrics") < "0.2.0") {
+    stop("The pipeline needs hf.econometrics >= 0.2.0 (the S7 API); run R CMD INSTALL ..",
+         call. = FALSE)
+  }
+  build <- function(fun, args, name) {
+    if (!is.list(args)) stop(sprintf("config$%s must be a list.", name), call. = FALSE)
+    tryCatch(do.call(fun, args), error = function(e) {
+      stop(sprintf("config$%s: %s", name, conditionMessage(e)), call. = FALSE)
+    })
+  }
+  build(hf.econometrics::lm_options, config$lm$options, "lm$options")
+  if (isTRUE(config$ajl$enabled)) {
+    ajl <- build(hf.econometrics::ajl_options, config$ajl$options, "ajl$options")
+    if (isTRUE(config$testing$require_ajl_day) && !(ajl@null %in% c("no_jump", "both"))) {
+      stop(paste0("config$testing$require_ajl_day needs the no-jump null: set ",
+                  "config$ajl$options$null to \"no_jump\" or \"both\"."), call. = FALSE)
+    }
+  }
+  if (isTRUE(config$aj_jump$enabled)) {
+    build(hf.econometrics::aj_jump_options, config$aj_jump$options, "aj_jump$options")
+  }
   invisible(config)
 }
 
@@ -81,11 +105,28 @@ with_ids <- function(ids, df) {
   cbind(ids[rep(1L, nrow(df))], df)
 }
 
-# Runs a method call under the configured error policy.
+# Runs a method call under the configured error policy. Warnings are
+# collected (and muffled) so that they can be written to the rows of the
+# call: `warning` holds their distinct messages joined by " | ", or NA.
 attempt <- function(fun, on_error) {
-  if (identical(on_error, "stop")) return(list(value = fun(), error = NA_character_))
-  tryCatch(list(value = fun(), error = NA_character_),
-           error = function(e) list(value = NULL, error = conditionMessage(e)))
+  warnings <- character()
+  run <- function() {
+    withCallingHandlers(fun(), warning = function(w) {
+      warnings <<- c(warnings, conditionMessage(w))
+      invokeRestart("muffleWarning")
+    })
+  }
+  collected <- function() {
+    if (length(warnings)) paste(unique(warnings), collapse = " | ") else NA_character_
+  }
+  if (identical(on_error, "stop")) {
+    value <- run()
+    return(list(value = value, error = NA_character_, warning = collected()))
+  }
+  tryCatch({
+    value <- run()
+    list(value = value, error = NA_character_, warning = collected())
+  }, error = function(e) list(value = NULL, error = conditionMessage(e), warning = collected()))
 }
 
 has_qs2 <- function() requireNamespace("qs2", quietly = TRUE)
