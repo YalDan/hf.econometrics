@@ -1,2 +1,16 @@
 ^.*\.Rproj$
 ^\.Rproj\.user$
+^LICENSE\.md$
+^DEVELOPMENT\.md$
+^NEWS\.md\.bak$
+^hf\.econometrics\.bib$
+^pipeline$
+^_targets$
+^renv$
+^renv\.lock$
+^\.Rprofile$
+^Dockerfile$
+^\.dockerignore$
+^Makefile$
+^\.github$
+^\.lintr$

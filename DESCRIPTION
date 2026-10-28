@@ -1,19 +1,42 @@
 Package: hf.econometrics
 Type: Package
-Title: High Frequency Econometrics
-Version: 0.1.0
-Author: Danial Saef
-Maintainer: Danial Saef <danial.saef@hu-berlin.de>
-Description: This package contains various implementations from the High Frequency Econometrics toolbox: Noise robust jump tests, preaveraging methodologies and preprocessing tools for high frequency tick datasets. The implementation is designed to be scalable with large datasets.
-License: MIT
-Encoding: UTF-8
-LazyData: true
-RoxygenNote: 7.2.3
-Roxygen: list(markdown = TRUE)
+Title: High-Frequency Econometrics: Jump Tests and Noise-Robust Volatility
+    Estimators
+Version: 0.2.0
+Authors@R:
+    person("Danial", "Saef", email = "danial.saef@hu-berlin.de",
+           role = c("aut", "cre"))
+Description: Implementations of high-frequency econometric methods that
+    follow their original sources equation by equation: the Lee and Mykland
+    (2012) <doi:10.1016/j.jeconom.2012.03.001> noise-robust jump test; the
+    Ait-Sahalia and Jacod (2009, 2011, 2012) jump, finite-activity and
+    jump-activity statistics; the Ait-Sahalia, Jacod and Li (2012)
+    <doi:10.1016/j.jeconom.2012.01.007> pre-averaged jump test; and
+    pre-averaging estimators of integrated variance (Jacod et al. 2009;
+    Podolskij and Vetter 2009; Jacod, Podolskij and Vetter 2010; Hautsch and
+    Podolskij 2013). Options and results are typed 'S7' objects. Reusable
+    utilities for regular-grid sampling and data cleaning are included; batch
+    processing lives in a separate 'targets' pipeline outside the package.
+License: MIT + file LICENSE
+URL: https://github.com/YalDan/hf.econometrics
+BugReports: https://github.com/YalDan/hf.econometrics/issues
+Depends:
+    R (>= 4.1.0)
 Imports:
-    xts,
-    imputeTS,
-    data.table,
-    lubridate,
-    quantmod,
-    highfrequency
+    S7 (>= 0.2.0),
+    stats,
+    utils
+Suggests:
+    testthat (>= 3.0.0)
+Config/testthat/edition: 3
+Encoding: UTF-8
+Roxygen: list(markdown = TRUE)
+RoxygenNote: 7.3.1
+Collate: 
+    'class-result.R'
+    'class-series.R'
+    'hf.econometrics-package.R'
+    'weights.R'
+    'preaveraging.R'
+    'utils-checks.R'
+    'utils-math.R'
