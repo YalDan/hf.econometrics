@@ -12,7 +12,7 @@
 HFSeries <- new_class(
   "HFSeries",
   properties = list(
-    time = class_POSIXct,
+    time = new_property(class_POSIXct, default = quote(.POSIXct(double(), tz = "UTC"))),
     log_price = class_double,
     symbol = new_property(class_character, default = NA_character_),
     venue = new_property(class_character, default = NA_character_)
@@ -72,6 +72,7 @@ hf_series <- function(time, price, log = FALSE, symbol = NA_character_,
 #' vector it returns the observation index `0, 1, ..., n`.
 #'
 #' @param x A numeric vector of log prices or an [HFSeries].
+#' @param ... Reserved for methods; currently unused.
 #' @return A double vector.
 #' @examples
 #' log_prices(log(c(100, 101, 100.5)))

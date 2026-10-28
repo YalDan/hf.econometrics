@@ -11,6 +11,8 @@ obs_times(x, ...)
 }
 \arguments{
 \item{x}{A numeric vector of log prices or an \link{HFSeries}.}
+
+\item{...}{Reserved for methods; currently unused.}
 }
 \value{
 A double vector.

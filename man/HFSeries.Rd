@@ -5,10 +5,7 @@
 \title{High-frequency price series}
 \usage{
 HFSeries(
-  time = (function (.data = double(), tz = "") 
- {
-     .POSIXct(.data, tz = tz)
- })(),
+  time = .POSIXct(double(), tz = "UTC"),
   log_price = numeric(0),
   symbol = NA_character_,
   venue = NA_character_
