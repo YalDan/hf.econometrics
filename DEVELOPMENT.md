@@ -51,7 +51,7 @@ class `hf_warning`.
   `.onLoad()` calls `S7::methods_register()`.
 - When a file's top-level code uses a class defined in another file, start
   the file with `#' @include other-file.R` followed by `NULL`. After adding
-  or renaming files, run `devtools::document()` so that the `Collate` field
+  or renaming files, run `roxygen2::roxygenise()` so that the `Collate` field
   stays complete. Files missing from `Collate` are not installed.
 
 **Time.** A call analyses one window. By default the window length is

@@ -30,8 +30,8 @@ pkg_root <- local({
   f <- sub("^--file=", "", grep("^--file=", commandArgs(FALSE), value = TRUE))
   if (length(f)) normalizePath(file.path(dirname(f), "..", "..")) else "."
 })
-if (requireNamespace("devtools", quietly = TRUE)) {
-  suppressMessages(devtools::load_all(pkg_root, quiet = TRUE))
+if (requireNamespace("pkgload", quietly = TRUE)) {
+  suppressMessages(pkgload::load_all(pkg_root, quiet = TRUE))
 } else {
   library(hf.econometrics)
 }

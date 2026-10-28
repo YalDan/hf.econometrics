@@ -15,3 +15,4 @@
 ^\.github$
 ^\.lintr$
 ^tests/simulations$
+^dev$

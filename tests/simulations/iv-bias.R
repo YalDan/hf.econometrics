@@ -21,7 +21,7 @@ R <- if (length(args) >= 2L) as.integer(args[[2L]]) else 30L
 out_file <- if (length(args) >= 3L) args[[3L]] else NA_character_
 stopifnot(noise_type %in% c("iid", "ma9"), R >= 2L)
 
-suppressMessages(devtools::load_all(".", quiet = TRUE))
+suppressMessages(pkgload::load_all(".", quiet = TRUE))
 source(file.path("tests", "testthat", "helper-sim.R"))
 
 n <- 86400L

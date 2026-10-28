@@ -27,7 +27,7 @@
 # If integrated_variance() is available, the feasible test (Podolskij-Vetter
 # volatility, the paper's default) is run on the no-jump days as well.
 
-suppressMessages(devtools::load_all(".", quiet = TRUE))
+suppressMessages(pkgload::load_all(".", quiet = TRUE))
 source(file.path("tests", "testthat", "helper-sim.R"))
 
 args <- commandArgs(trailingOnly = TRUE)
