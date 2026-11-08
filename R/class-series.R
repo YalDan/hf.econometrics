@@ -35,12 +35,14 @@ HFSeries <- new_class(
 
 #' Create a high-frequency price series
 #'
-#' @param time Observation times: a `POSIXct` vector, or anything
-#'   `as.POSIXct()` accepts, with `tz` applied.
+#' @param time Observation times: a `POSIXct` vector, ISO-8601 strings, or
+#'   numbers of seconds since 1970-01-01 UTC. Strings and numbers are
+#'   converted with [parse_timestamps()] (`unit = "s"` for numbers), so a
+#'   layout it does not support is an error rather than a silent truncation.
 #' @param price Prices, or log prices if `log = TRUE`.
 #' @param log Is `price` already in logs?
 #' @param symbol,venue Optional single-string labels.
-#' @param tz Time zone used when `time` is converted to `POSIXct`.
+#' @param tz Time zone for strings without a zone designator.
 #' @return An [HFSeries] object.
 #' @examples
 #' t0 <- as.POSIXct("2022-03-04", tz = "UTC")
@@ -52,7 +54,9 @@ hf_series <- function(time, price, log = FALSE, symbol = NA_character_,
   check_flag(log, "log")
   price <- check_numeric(price, "price", min_length = 2L)
   if (!log && any(price <= 0)) hf_abort("`price` must be strictly positive.")
-  if (!inherits(time, "POSIXct")) time <- as.POSIXct(time, tz = tz)
+  if (!inherits(time, "POSIXct")) {
+    time <- parse_timestamps(time, unit = if (is.numeric(time)) "s", tz = tz)
+  }
   HFSeries(
     time = time,
     log_price = if (log) price else base::log(price),

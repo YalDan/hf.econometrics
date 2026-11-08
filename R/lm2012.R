@@ -575,15 +575,7 @@ lm_window_iv <- function(x, y, n, k, options) {
     est <- do.call(f, c(list(x_sub), options@iv_args))
     label <- "user function"
   } else {
-    iv_fun <- get0("integrated_variance", mode = "function")
-    if (is.null(iv_fun)) {
-      hf_abort(paste(
-        "The plug-in variance needs integrated_variance(), which is not available.",
-        "Supply the integrated variance with lm_options(iv = ), pass an estimator",
-        "function as `iv_method`, or use `variance = \"empirical\"`."
-      ))
-    }
-    est <- do.call(iv_fun, c(list(x_sub, method = f), options@iv_args))
+    est <- do.call(integrated_variance, c(list(x_sub, method = f), options@iv_args))
     label <- f
   }
   if (is.numeric(est) && !is.object(est) && length(est) == 1L) {

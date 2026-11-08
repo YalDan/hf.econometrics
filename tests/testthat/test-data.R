@@ -101,3 +101,13 @@ test_that("windows are closed on the left (Lee and Mykland 2012, Section 6.1)", 
   r <- split_windows(t0 + c(5, 86400), "1 day", origin = t0, closed = "right")
   expect_identical(r$n, 2L)
 })
+
+test_that("hf_series() parses ISO-8601 and epoch times strictly", {
+  iso <- c("2022-03-04T10:00:00Z", "2022-03-04T10:00:05Z", "2022-03-04T10:00:10Z")
+  s <- hf_series(iso, c(100, 101, 102))
+  expect_equal(as.numeric(obs_times(s)), as.numeric(parse_timestamps(iso)))
+  e <- hf_series(as.numeric(parse_timestamps(iso)), c(100, 101, 102))
+  expect_equal(obs_times(e), obs_times(s))
+  expect_error(hf_series(c("04.03.2022 10:00", "04.03.2022 10:01"), c(1, 2)),
+               class = "hf_input_error")
+})

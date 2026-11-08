@@ -197,7 +197,9 @@ if (identical(profile, "lm2012")) {
     units = list(pool_venues = FALSE),               # one market at a time
     frequency = list(skip_ineligible = FALSE),       # no coverage rule in LM 2012
     filters = list(
-      bounceback = list(enabled = FALSE),            # the 7-sd rule handles bouncebacks
+      # LM 2012 has no bounceback filter. The 7-sd rule removes a spike
+      # together with the observation after it (see filter_outliers()).
+      bounceback = list(enabled = FALSE),
       outliers = list(n_sd = 7)                      # [LM 2012 §6.1]
     ),
     lm = list(input = "ticks", window = "1 hour"),   # [LM 2012 §6.1]

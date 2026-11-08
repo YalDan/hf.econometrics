@@ -14,8 +14,10 @@ hf_series(
 )
 }
 \arguments{
-\item{time}{Observation times: a \code{POSIXct} vector, or anything
-\code{as.POSIXct()} accepts, with \code{tz} applied.}
+\item{time}{Observation times: a \code{POSIXct} vector, ISO-8601 strings, or
+numbers of seconds since 1970-01-01 UTC. Strings and numbers are
+converted with \code{\link[=parse_timestamps]{parse_timestamps()}} (\code{unit = "s"} for numbers), so a
+layout it does not support is an error rather than a silent truncation.}
 
 \item{price}{Prices, or log prices if \code{log = TRUE}.}
 
@@ -23,7 +25,7 @@ hf_series(
 
 \item{symbol, venue}{Optional single-string labels.}
 
-\item{tz}{Time zone used when \code{time} is converted to \code{POSIXct}.}
+\item{tz}{Time zone for strings without a zone designator.}
 }
 \value{
 An \link{HFSeries} object.
