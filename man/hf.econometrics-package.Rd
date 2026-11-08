@@ -45,5 +45,10 @@ Useful links:
 \author{
 \strong{Maintainer}: Danial Saef \email{danial.saef@hu-berlin.de}
 
+Authors:
+\itemize{
+  \item Danial Saef \email{danial.saef@hu-berlin.de}
+}
+
 }
 \keyword{internal}

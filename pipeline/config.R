@@ -127,8 +127,17 @@ config <- list(
   ),
 
   # Ait-Sahalia and Jacod jump test on the same grid; not part of the
-  # companion procedure.
-  aj_jump = list(enabled = FALSE, options = list()),
+  # companion procedure. The package defaults describe an equity trading day
+  # (horizon = 1/252 years, sigma = 0.25 per year). On 24-hour crypto data
+  # they put the cutoff at about 4 standard deviations of the returns for an
+  # annual volatility of 60% and at 2.4 for 100%, which shrinks the variance
+  # estimate and oversizes the no-jump test. Here a day is 1/365.25 calendar
+  # years and the cutoff follows the pilot-based "sd" rule of Ait-Sahalia and
+  # Jacod (2012): `sigma` then sets only the pilot cutoff, 4 sigma
+  # sqrt(delta_n), which at 1 per year lies at least 4 standard deviations
+  # out for annual volatilities up to 100%.
+  aj_jump = list(enabled = FALSE,
+                 options = list(truncation = "sd", sigma = 1, horizon = 1 / 365.25)),
 
   testing = list(
     # [SNSH 2021 §5] "We set alpha = 0.999" is the confidence level, so the

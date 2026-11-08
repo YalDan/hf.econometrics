@@ -57,7 +57,7 @@ without jumps, 1 with jumps (eq. 3.14).}
 
 \item{critical_value}{Boundaries of the critical regions: reject "no jump"
 if \eqn{S_{RJ}} is below \eqn{\gamma'' - z_\alpha \Delta_n^{1/4}
-  \sqrt{\Sigma^c_{RJ,n}}} (eq. 3.26); reject "jumps" if it is above
+\sqrt{\Sigma^c_{RJ,n}}} (eq. 3.26); reject "jumps" if it is above
 \eqn{1 + z_\alpha \Delta_n^{1/4} \sqrt{\Sigma^j_{RJ,n}}} (eq. 3.27).}
 
 \item{p_value}{One-sided p-values, matching the critical regions.}

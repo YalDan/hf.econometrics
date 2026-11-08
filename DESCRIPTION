@@ -31,7 +31,6 @@ Suggests:
 Config/testthat/edition: 3
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
-RoxygenNote: 7.3.1
 Collate: 
     'aj-power-variation.R'
     'class-result.R'
@@ -59,3 +58,4 @@ Collate:
     'preaveraging.R'
     'utils-checks.R'
     'utils-math.R'
+Config/roxygen2/version: 8.1.1

@@ -21,7 +21,7 @@ R/                      package code: methods + reusable data utilities
   data-*.R              reusable data utilities (gridding, filters, windows)
 tests/testthat/         sparse unit tests (see "Testing policy")
 pipeline/               targets pipeline for batch processing (not in the package build)
-renv.lock, Dockerfile   reproducible environment
+renv.lock               reproducible environment
 ```
 
 ## Conventions

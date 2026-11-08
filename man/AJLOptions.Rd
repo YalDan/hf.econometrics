@@ -36,7 +36,7 @@ AJLOptions(
 
 \item{trunc_C, trunc_exponent}{Constants \eqn{C} and \eqn{\varpi'} of the
 truncation level \eqn{u_n = C (\bar V(Z, g, 2)^n_T / T)^{1/2}
-  \Delta_n^{\varpi'}}.}
+\Delta_n^{\varpi'}}.}
 
 \item{null}{Null hypothesis: \code{"no_jump"}, \code{"jump"} or \code{"both"}.}
 

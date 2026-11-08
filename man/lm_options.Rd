@@ -85,7 +85,7 @@ reports \eqn{C = M / \lfloor n/k \rfloor^{1/2}}. Not in the paper.}
 
 \item{demean}{Use the drift-robust statistic of Appendix 8.1, which
 subtracts \eqn{\hat{\mu}_{\mathcal L} = \lfloor n/(kM) \rfloor^{-1}
-  \sum_j \mathcal L(t_j)} from every \eqn{\mathcal L(t_j)}?}
+\sum_j \mathcal L(t_j)} from every \eqn{\mathcal L(t_j)}?}
 
 \item{M_rounding}{How \eqn{C \lfloor n/k \rfloor^{1/2}} becomes an
 integer block size: \code{"floor"} (default), \code{"round"} or \code{"ceiling"}.

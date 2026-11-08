@@ -37,7 +37,7 @@ hard-coded in the authors' Matlab code; see \code{\link[=ajl_constants]{ajl_cons
 \item{psi, psi_prime}{Matrices with rows \code{minus}, \code{plus} and columns \code{gg},
 \code{gh}, \code{hh}, \code{combined}: \eqn{\Psi_\pm(g, g)}, \eqn{\Psi_\pm(g, h)},
 \eqn{\Psi_\pm(h, h)} and \eqn{\Psi_\pm = \Psi_\pm(g, g) + \gamma'^2
-  \Psi_\pm(h, h) - 2 \gamma' \Psi_\pm(g, h)}, and likewise for
+\Psi_\pm(h, h) - 2 \gamma' \Psi_\pm(g, h)}, and likewise for
 \eqn{\Psi'_\pm} (eq. 3.24).}
 }
 \description{
