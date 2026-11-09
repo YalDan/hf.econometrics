@@ -88,8 +88,8 @@ supplied).}
 (tick index \eqn{j} of \eqn{t_j}, counting from 0), \code{time}
 (\eqn{t_j} from \code{\link[=obs_times]{obs_times()}}), \code{time_end} (time of the last observation
 that enters \eqn{\mathcal L(t_j)}), \code{P_hat} (\eqn{\hat P(t_j)}), \code{L}
-(\eqn{\mathcal L(t_j)}), \code{chi} (\eqn{\mathcal X(t_j)}) and, if
-\code{flag_blocks}, \code{jump} (\eqn{-1}, 0 or 1).}
+(\eqn{\mathcal L(t_j)}), \code{chi} (\eqn{\mathcal X(t_j)}), \code{p_value} (see
+\code{\link[=lm_blocks]{lm_blocks()}}) and, if \code{flag_blocks}, \code{jump} (\eqn{-1}, 0 or 1).}
 
 \item{start, end}{Times of the first and last observation of the window.}
 

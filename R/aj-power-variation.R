@@ -170,6 +170,10 @@ aj_power_sum <- function(adx, p, u = Inf, upper = FALSE) {
   sum(adx[keep]^p)
 }
 
+# Number of the sorted values `s` above each cutoff in `u` (U(0, u) of AJ 2012,
+# eq. 10, for many cutoffs at once), by binary search.
+aj_count_above <- function(s, u) as.double(length(s) - findInterval(u, s))
+
 # Pilot volatility (AJ 2012, WP p. 32) and the scale s with u_n = alpha * s.
 aj_cutoff_scale <- function(adx, delta, method, varpi, sigma, pilot) {
   n <- length(adx)

@@ -167,3 +167,10 @@ test_that("bad inputs raise hf_input_error", {
                            options = aj_spectrum_options(deltas = 5)),
                class = "hf_input_error")
 })
+
+test_that("counts above cutoffs match a direct count, ties included", {
+  a <- c(3, 1, 2, 2, 5)
+  u <- c(0, 2, 2.5, 5, 6)
+  expect_identical(aj_count_above(sort(a), u),
+                   vapply(u, function(v) sum(a > v), numeric(1)))
+})

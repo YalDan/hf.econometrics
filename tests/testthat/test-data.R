@@ -111,3 +111,8 @@ test_that("hf_series() parses ISO-8601 and epoch times strictly", {
   expect_error(hf_series(c("04.03.2022 10:00", "04.03.2022 10:01"), c(1, 2)),
                class = "hf_input_error")
 })
+
+test_that("an observation exactly at start counts in the first interval", {
+  expect_equal(grid_coverage(t0 + c(0, 1.5), 1, start = t0, end = t0 + 2), 1)
+  expect_equal(grid_coverage(t0 + c(-1, 1.5), 1, start = t0, end = t0 + 2), 0.5)
+})

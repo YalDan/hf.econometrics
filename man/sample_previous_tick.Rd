@@ -37,7 +37,8 @@ and 86,400 returns, the last of which covers 23:59:59 to 24:00:00.
 Grid point \eqn{g_j} closes the interval \eqn{(g_{j-1}, g_j]}: an
 observation exactly at \eqn{g_j} belongs to \eqn{g_j}, not to
 \eqn{g_{j+1}}. \code{n_obs} counts the observations in that interval. For
-\eqn{g_0} it counts the observations at or before \code{start}. The price at a
+\eqn{g_0} it counts the observations at or before \code{start}; adding them to
+\eqn{g_1} gives the intervals of \code{\link[=grid_coverage]{grid_coverage()}}. The price at a
 grid point whose interval is empty is the previous price carried forward,
 that is, last-price imputation. Grid points before the first observation
 have price \code{NA}. Observations before \code{start} therefore feed the price at

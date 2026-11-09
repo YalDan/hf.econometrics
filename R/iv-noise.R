@@ -108,10 +108,14 @@ noise_variance <- function(x, method = c("autocovariance", "pv2009", "hp2013"),
   dy <- iv_returns(x, q + 2L, "noise_variance")
   switch(method,
     autocovariance = noise_autocov(dy, q, long_run),
-    pv2009 = sum(dy^2) / (2 * length(dy)),
+    pv2009 = noise_rv(dy),
     hp2013 = noise_hp2013(dy)
   )
 }
+
+# PV (2009, eq. 3.5): RV / (2n), also the noise correction implicit in JLMPV
+# (2009, eq. 3.6) and HP (2013, eqs. 2.11-2.12).
+noise_rv <- function(dy) sum(dy^2) / (2 * length(dy))
 
 # Realized autocovariances gamma(k), k = 1..q+1, each the mean of the n - k
 # available products (HP 2013, eq. 3.20, with t = 1).

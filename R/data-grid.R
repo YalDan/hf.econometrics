@@ -155,7 +155,8 @@ make_grid <- function(frame, interval) {
 #' Grid point \eqn{g_j} closes the interval \eqn{(g_{j-1}, g_j]}: an
 #' observation exactly at \eqn{g_j} belongs to \eqn{g_j}, not to
 #' \eqn{g_{j+1}}. `n_obs` counts the observations in that interval. For
-#' \eqn{g_0} it counts the observations at or before `start`. The price at a
+#' \eqn{g_0} it counts the observations at or before `start`; adding them to
+#' \eqn{g_1} gives the intervals of [grid_coverage()]. The price at a
 #' grid point whose interval is empty is the previous price carried forward,
 #' that is, last-price imputation. Grid points before the first observation
 #' have price `NA`. Observations before `start` therefore feed the price at
@@ -218,9 +219,13 @@ sample_previous_tick <- function(time, price, interval, start = NULL, end = NULL
 
 #' Share of grid intervals that contain an observation
 #'
-#' Splits `[start, end]` into intervals \eqn{(g_{j-1}, g_j]} of length
-#' `interval` (the convention of [sample_previous_tick()]) and returns the
-#' share of intervals with at least one observation.
+#' Splits `[start, end]` into the intervals \eqn{[g_0, g_1]} and
+#' \eqn{(g_{j-1}, g_j]}, \eqn{j = 2, \dots, J}, of length `interval`, and
+#' returns the share of intervals with at least one observation. These are
+#' the intervals of [sample_previous_tick()], except that an observation
+#' exactly at `start` counts in the first interval: every observation in
+#' `[start, end]` is counted once, so trades at midnight are not lost when
+#' the frame is a calendar day.
 #'
 #' @inheritParams sample_previous_tick
 #' @return A single number in \eqn{[0, 1]}.
@@ -236,7 +241,10 @@ grid_coverage <- function(time, interval, start = NULL, end = NULL) {
 
 coverage_of <- function(ti, interval, frame) {
   grid <- make_grid(frame, interval)
-  counts <- diff(findInterval(grid, ti$value))
+  # Observations before `start` are not counted; those at `start` join the
+  # first interval.
+  before <- findInterval(grid[1L], ti$value, left.open = TRUE)
+  counts <- diff(c(before, findInterval(grid[-1L], ti$value)))
   mean(counts > 0L)
 }
 

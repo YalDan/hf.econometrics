@@ -17,7 +17,8 @@
 #       sqrt(sigma^2 T), is written as sigma_hat.
 #     lm_blocks(): one row per block difference L(t_j): index (tick j of t_j,
 #       from 0), time (t_j), time_end (last observation in L(t_j)), P_hat, L,
-#       chi (X(t_j), eq. 10) and jump (-1/0/1 at lm_options(alpha)).
+#       chi (X(t_j), eq. 10), p_value (the Gumbel p-value of Theorem 1 at
+#       |chi|) and jump (-1/0/1 at lm_options(alpha)).
 #   lm_holm(p, alpha)  -> data.frame(window, p_value, p_adjusted, reject)
 #   ajl_test(x, options = ajl_options(...))                  -> <AJLTest>
 #     as.data.frame(): one row per null tested; `null` is "no_jump" (eq. 3.26,
@@ -50,15 +51,13 @@ lm_window_table <- function(test) {
   cbind(row[seq_len(at)], sigma_hat = sigma_hat, row[-seq_len(at)])
 }
 
-# One row per block: lm_blocks(<LMTest>), plus p_block (not in the package):
-# the Gumbel p-value of Theorem 1 evaluated at xi_j = (|chi_j| - A_n) / B_n
-# with the A_n and B_n of the window, i.e. the window p-value that block j
-# would have if its |chi| were the maximum. The block with the largest |chi|
-# has p_block = p_value of the window.
-lm_block_table <- function(test, row) {
+# One row per block: lm_blocks(<LMTest>), with its p_value (the window
+# p-value that block j would have if its |chi| were the maximum) renamed
+# p_block, so that it is not mistaken for the p-value of the window. The block
+# with the largest |chi| has p_block = p_value of the window.
+lm_block_table <- function(test) {
   b <- data.table::as.data.table(hf.econometrics::lm_blocks(test))
-  xi <- (abs(b$chi) - row$A_n) / row$B_n
-  data.table::set(b, j = "p_block", value = -expm1(-exp(-xi)))
+  data.table::setnames(b, "p_value", "p_block")
   b
 }
 
@@ -84,7 +83,7 @@ run_lm_unit <- function(prepared, cfg_lm) {
     res <- attempt(function() {
       test <- hf.econometrics::lm_test(as_hf_series(series[rows], info), options = opts)
       row <- lm_window_table(test)
-      list(row = row, blocks = lm_block_table(test, row))
+      list(row = row, blocks = lm_block_table(test))
     }, cfg_lm$on_error)
     if (is.null(res$value)) {
       windows[[j]] <- cbind(wid, status = "error", message = res$error, warning = res$warning)

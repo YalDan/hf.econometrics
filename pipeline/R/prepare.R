@@ -41,6 +41,9 @@ prepare_unit <- function(unit, cfg) {
     # the day and is left out.
     g <- hf.econometrics::sample_previous_tick(agg$time, agg$price, f_used,
                                                start = day$start, end = day$end)
+    # g_0 (midnight) closes no interval of the day: its trades join the first
+    # interval [g_0, g_1], as in grid_coverage().
+    g$n_obs[2L] <- g$n_obs[2L] + g$n_obs[1L]
     g <- g[-1L, ]
     data.table::as.data.table(g[g$n_obs > 0L, ])
   }

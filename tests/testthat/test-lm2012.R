@@ -104,3 +104,13 @@ test_that("bad options and inputs raise hf_input_error", {
                class = "hf_input_error")
   expect_error(lm_holm(c(0.5, 2)), class = "hf_input_error")
 })
+
+test_that("block p-values are the Gumbel p-value of Theorem 1 at each |chi|", {
+  y <- sim_log_prices(23400, iv = 1e-4, noise_sd = 1e-4, seed = 5,
+                      jumps = cbind(15001, 0.005))
+  res <- lm_test(y, lm_options(iv = 1e-4))
+  b <- lm_blocks(res)
+  expect_equal(b$p_value[which.max(abs(b$chi))], res@p_value)
+  expect_identical(b$jump != 0L, b$p_value < res@alpha)
+  expect_true(any(b$jump != 0L))
+})

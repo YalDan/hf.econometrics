@@ -202,7 +202,7 @@ iv_jlmpv2009 <- function(x, kn = NULL, theta = 1 / 3, weight = weight_tent(),
     method = "jlmpv2009",
     reference = if (adjust) "Jacod et al. (2009, Sec. 4.2)" else
       "Jacod et al. (2009, eq. 3.6)",
-    n = n, jump_robust = FALSE, noise_variance = sum(dy^2) / (2 * n),
+    n = n, jump_robust = FALSE, noise_variance = noise_rv(dy),
     tuning = tuning
   )
 }

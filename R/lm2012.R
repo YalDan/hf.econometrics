@@ -205,8 +205,8 @@ LMOptions <- new_class(
 #'   (tick index \eqn{j} of \eqn{t_j}, counting from 0), `time`
 #'   (\eqn{t_j} from [obs_times()]), `time_end` (time of the last observation
 #'   that enters \eqn{\mathcal L(t_j)}), `P_hat` (\eqn{\hat P(t_j)}), `L`
-#'   (\eqn{\mathcal L(t_j)}), `chi` (\eqn{\mathcal X(t_j)}) and, if
-#'   `flag_blocks`, `jump` (\eqn{-1}, 0 or 1).
+#'   (\eqn{\mathcal L(t_j)}), `chi` (\eqn{\mathcal X(t_j)}), `p_value` (see
+#'   [lm_blocks()]) and, if `flag_blocks`, `jump` (\eqn{-1}, 0 or 1).
 #' @param start,end Times of the first and last observation of the window.
 #' @param options The [LMOptions] used.
 #' @inheritParams HFResult
@@ -537,7 +537,8 @@ lm_test <- function(x, options = lm_options()) {
     time_end = times[j + (2L * M - 1L) * k + 1L],
     P_hat = b$P_hat[seq_len(n_L)],
     L = L,
-    chi = chi
+    chi = chi,
+    p_value = -expm1(-exp(-(abs(chi) - A_n) / B_n))
   )
   if (options@flag_blocks) blocks$jump <- as.integer(sign(chi) * (abs(chi) > threshold))
 
@@ -597,9 +598,19 @@ lm_window_iv <- function(x, y, n, k, options) {
 #'
 #' Returns the table of block differences of an [LMTest]: one row per
 #' \eqn{t_j \in \mathcal G_n^{kM}} with `index`, `time`, `time_end`,
-#' `P_hat`, `L`, `chi` and, if the test was run with `flag_blocks = TRUE`,
-#' the jump flag `jump`. See [LMTest] for the columns and [lm_test()] for
-#' how a jump time relates to `time` and `time_end`.
+#' `P_hat`, `L`, `chi`, `p_value` and, if the test was run with
+#' `flag_blocks = TRUE`, the jump flag `jump`. See [LMTest] for the columns
+#' and [lm_test()] for how a jump time relates to `time` and `time_end`.
+#'
+#' `p_value` is the Gumbel p-value of Theorem 1 at
+#' \eqn{\xi_j = (|\mathcal X(t_j)| - A_n)/B_n}: the probability under the null
+#' that the maximum over the window exceeds the statistic of block \eqn{j}.
+#' It is the block's single-step max-type adjusted p-value within its window.
+#' The block with the largest \eqn{|\mathcal X(t_j)|} has the window's
+#' p-value, and `jump` is non-zero exactly when `p_value` is below the test's
+#' `alpha`. Across windows, multiply it by the factor of the family-wise
+#' adjustment, for example the window's Holm multiplier, before comparing it
+#' with a level.
 #'
 #' @param test An [LMTest] object.
 #' @return A data frame.
