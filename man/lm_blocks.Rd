@@ -15,9 +15,20 @@ A data frame.
 \description{
 Returns the table of block differences of an \link{LMTest}: one row per
 \eqn{t_j \in \mathcal G_n^{kM}} with \code{index}, \code{time}, \code{time_end},
-\code{P_hat}, \code{L}, \code{chi} and, if the test was run with \code{flag_blocks = TRUE},
-the jump flag \code{jump}. See \link{LMTest} for the columns and \code{\link[=lm_test]{lm_test()}} for
-how a jump time relates to \code{time} and \code{time_end}.
+\code{P_hat}, \code{L}, \code{chi}, \code{p_value} and, if the test was run with
+\code{flag_blocks = TRUE}, the jump flag \code{jump}. See \link{LMTest} for the columns
+and \code{\link[=lm_test]{lm_test()}} for how a jump time relates to \code{time} and \code{time_end}.
+}
+\details{
+\code{p_value} is the Gumbel p-value of Theorem 1 at
+\eqn{\xi_j = (|\mathcal X(t_j)| - A_n)/B_n}: the probability under the null
+that the maximum over the window exceeds the statistic of block \eqn{j}.
+It is the block's single-step max-type adjusted p-value within its window.
+The block with the largest \eqn{|\mathcal X(t_j)|} has the window's
+p-value, and \code{jump} is non-zero exactly when \code{p_value} is below the test's
+\code{alpha}. Across windows, multiply it by the factor of the family-wise
+adjustment, for example the window's Holm multiplier, before comparing it
+with a level.
 }
 \examples{
 y <- cumsum(c(0, rnorm(5000, 0, 1e-4))) + rnorm(5001, 0, 1e-4)

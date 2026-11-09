@@ -103,7 +103,7 @@ combine_detections <- function(blocks, ajl, cfg_test, cfg_cons) {
                                 symbol = character(), venue = character(), window = integer(),
                                 window_start = no_time, index = integer(), time = no_time,
                                 time_end = no_time, P_hat = numeric(), L = numeric(),
-                                chi = numeric(), jump = integer(), p_block = numeric(),
+                                chi = numeric(), p_block = numeric(), jump = integer(),
                                 block = integer(), multiplier = numeric(), detected = logical())
   }
   # Locals used inside `[` start with "." so that no method column masks them.

@@ -22,9 +22,13 @@ to midnight after the last. \code{end - start} must be a whole multiple of
 A single number in \eqn{[0, 1]}.
 }
 \description{
-Splits \verb{[start, end]} into intervals \eqn{(g_{j-1}, g_j]} of length
-\code{interval} (the convention of \code{\link[=sample_previous_tick]{sample_previous_tick()}}) and returns the
-share of intervals with at least one observation.
+Splits \verb{[start, end]} into the intervals \eqn{[g_0, g_1]} and
+\eqn{(g_{j-1}, g_j]}, \eqn{j = 2, \dots, J}, of length \code{interval}, and
+returns the share of intervals with at least one observation. These are
+the intervals of \code{\link[=sample_previous_tick]{sample_previous_tick()}}, except that an observation
+exactly at \code{start} counts in the first interval: every observation in
+\verb{[start, end]} is counted once, so trades at midnight are not lost when
+the frame is a calendar day.
 }
 \examples{
 t0 <- as.POSIXct("2022-03-04", tz = "UTC")

@@ -190,7 +190,7 @@ iv_hp2013 <- function(x, theta = 0.6, kn = NULL, weight = weight_tent(),
   }
   if (adjust) main <- main * n / nsum
   if (noise == "iid") {
-    omega2 <- sum(dy^2) / (2 * n)
+    omega2 <- noise_rv(dy)
     correction <- noise_coef * 2 * n * omega2 # psi1 Dn RV / (2 theta^2 psi2)
   } else {
     omega2 <- noise_autocov(dy, q, FALSE)

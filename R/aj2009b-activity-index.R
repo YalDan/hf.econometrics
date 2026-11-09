@@ -273,7 +273,7 @@ aj_activity_index <- function(x, options = aj_activity_index_options()) {
                                    n, 2L * options@k)
   cut <- aj_options_cutoff(adx, options)
   s <- cut$scale
-  count <- function(a, v) vapply(v, function(vv) sum(a > vv), numeric(1))
+  sadx <- sort(adx)
 
   if (options@estimator == "truncation") {
     grid <- expand.grid(alpha = options@alpha, ratio = options@alpha_ratio)
@@ -281,8 +281,8 @@ aj_activity_index <- function(x, options = aj_activity_index_options()) {
     a2 <- grid$alpha * grid$ratio
     u1 <- a1 * s
     u2 <- a2 * s
-    U1 <- count(adx, u1)
-    U2 <- count(adx, u2)
+    U1 <- aj_count_above(sadx, u1)
+    U2 <- aj_count_above(sadx, u2)
     denom <- log(a2 / a1)
   } else {
     kk <- options@k
@@ -290,8 +290,8 @@ aj_activity_index <- function(x, options = aj_activity_index_options()) {
     a2 <- rep(NA_real_, length(a1))
     u1 <- a1 * s
     u2 <- u1 * kk^options@varpi
-    U1 <- count(adx, u1)
-    U2 <- count(abs(aj_increments(y, kk)), u2)
+    U1 <- aj_count_above(sadx, u1)
+    U2 <- aj_count_above(sort(abs(aj_increments(y, kk))), u2)
     denom <- rep(options@varpi * log(kk), length(a1))
   }
   # eqs. (16)-(17) with the convention "0 if either count is 0"; eqs. (21)-(22)
@@ -307,7 +307,7 @@ aj_activity_index <- function(x, options = aj_activity_index_options()) {
   correction <- rep(NA_real_, length(est))
   method_bc <- options@bias_correction
   if (method_bc != "none") {
-    correction <- aj_beta_bias(method_bc, estimate, adx, s, a1, a2, U1, U2,
+    correction <- aj_beta_bias(method_bc, estimate, sadx, s, a1, a2, U1, U2,
                                cut$sigma_hat^2 * cut$delta, options@bias_grid)
   }
   estimate_bc <- if (method_bc == "none") NA_real_ else mean(est - correction)
@@ -328,8 +328,9 @@ aj_activity_index <- function(x, options = aj_activity_index_options()) {
 }
 
 # Small-sample bias of beta-hat (AJ 2009b, Section 5) for each cutoff pair
-# (a1, a2), evaluated at the first-stage estimate b.
-aj_beta_bias <- function(method, b, adx, s, a1, a2, U1, U2, s2c, bias_grid) {
+# (a1, a2), evaluated at the first-stage estimate b. `sadx` holds the sorted
+# absolute increments.
+aj_beta_bias <- function(method, b, sadx, s, a1, a2, U1, U2, s2c, bias_grid) {
   na <- rep(NA_real_, length(a1))
   if (!is.finite(b) || b <= 0 || b >= 2) {
     hf_warn("The bias correction needs a first-stage estimate in (0, 2), not %s.", format(b))
@@ -341,7 +342,7 @@ aj_beta_bias <- function(method, b, adx, s, a1, a2, U1, U2, s2c, bias_grid) {
     # (d theta^b / 2c) Delta_n^(1 - varpi b) / alpha^b = (b d / 4c^2) U / n.
     cb <- gamma(b + 1) * sin(pi * b / 2) / (2 * pi)
     db <- -gamma(2 * b + 1) * sin(pi * b) / (8 * pi)
-    n <- length(adx)
+    n <- length(sadx)
     return((b * (b + 1) / 2 * s2c * ((a1 * s)^(-2) - (a2 * s)^(-2)) +
               b * db / (4 * cb^2) * (U1 - U2) / n) / denom)
   }
@@ -351,7 +352,7 @@ aj_beta_bias <- function(method, b, adx, s, a1, a2, U1, U2, s2c, bias_grid) {
     hi <- max(a2)
     seq(lo, hi, length.out = max(4L, floor(hi - lo) + 1L))
   }
-  Ug <- vapply(g * s, function(v) sum(adx > v), numeric(1))
+  Ug <- aj_count_above(sadx, g * s)
   X <- cbind(g^(-b), g^(-2 - b), g^(-2 * b))
   fit <- stats::lm.fit(X, Ug)
   co <- unname(fit$coefficients)

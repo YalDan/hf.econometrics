@@ -128,8 +128,7 @@ iv_pv2009 <- function(x, K = NULL, L = NULL,
     check_choice(noise, c("autocovariance", "pv2009"), "noise")
   dy <- diff(y)
   if (is.null(noise_variance)) {
-    omega2 <- if (noise == "autocovariance") noise_autocov(dy, 0L, FALSE) else
-      sum(dy^2) / (2 * n)
+    omega2 <- if (noise == "autocovariance") noise_autocov(dy, 0L, FALSE) else noise_rv(dy)
   } else {
     omega2 <- check_number(noise_variance, "noise_variance", lower = 0)
     noise <- "user"
